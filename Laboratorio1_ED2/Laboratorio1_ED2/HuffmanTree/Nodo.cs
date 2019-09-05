@@ -13,7 +13,7 @@ namespace Laboratorio1_ED2.HuffmanTree
         public Nodo Derecha { get; set; }
         public List<bool>
 
-        Traverse(char Caracter, List<bool> data)
+        Patron(char Caracter, List<bool> data)
         {
             if (Derecha==null && Izquierda==null)
             {
@@ -36,14 +36,14 @@ namespace Laboratorio1_ED2.HuffmanTree
                     leftPath.AddRange(data);
                     leftPath.Add(false);
 
-                    left = Izquierda.Traverse(Caracter, leftPath);
+                    left = Izquierda.Patron(Caracter, leftPath);
                 }
                 if (Derecha != null)
                 {
                     List<bool> rightPath = new List<bool>();
                     rightPath.AddRange(data);
                     rightPath.Add(true);
-                    right = Derecha.Traverse(Caracter, rightPath);
+                    right = Derecha.Patron(Caracter, rightPath);
                 }
                 if (left != null)
                 {
