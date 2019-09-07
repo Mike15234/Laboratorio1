@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using Laboratorio1_ED2.Helpers;
@@ -60,29 +61,12 @@ namespace Laboratorio1_ED2.HuffmanTree
             List<bool> ConvertirTextoBinario = new List<bool>();
             for (var i = 0; i < textoCompleto.Length; i++)
             {
-                List<bool> ConvertirCaracter = this.Raiz.Traverse(textoCompleto[i], new List<bool>());
+                List<bool> ConvertirCaracter = this.Raiz.Patron(textoCompleto[i], new List<bool>());
                 ConvertirTextoBinario.AddRange(ConvertirCaracter);
             }
-            BitArray bits = new BitArray(ConvertirTextoBinario.ToArray());          
+            BitArray bits = new BitArray(ConvertirTextoBinario.ToArray());
             return bits;
         }
-
-       // public void 
-
-        //public static string Comprimido (string Binario)
-        //{
-        //    string Convertido = Convert.ToString(Binario);
-        //    char[] ArregloBits = Convertido.ToArray();
-        //    System.Text.Encoding encEncoder = System.Text.ASCIIEncoding.ASCII;
-
-        //    System.Text.Encoding.Default.GetString(Binario);
-        //    System.Text.ASCIIEncoding.GetBytes(ArregloBits);
-        //    string TextoComprimido;
-
-        //    TextoComprimido = encEncoder.ge(Binario);
-
-        //    return TextoComprimido;
-        //}
 
         public string Desifrado (BitArray bits)//deshace el codigo ya cifrado
         {
