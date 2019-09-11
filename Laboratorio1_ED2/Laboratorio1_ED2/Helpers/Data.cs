@@ -31,15 +31,14 @@ namespace Laboratorio1_ED2.Helpers
         Nodo nodo = new Nodo();
     
         public bool Inicial = true;
-        int totalCaracteres;
-        string leerlineas = "";
         string store = string.Empty; //distintos caracteres en un string
 
         List<Nodo> OrdenProbabilidades = new List<Nodo>();
         const int bufferLength = 1000;
         string letters;
-        public void LecturaArchivo(string ruta) //LEE EL ARCHIVO
+        public void LecturaArchivo(string ruta, string nombre, string rutaEscritura) //LEE EL ARCHIVO
         {
+            HuffmanTree.Arbol arbol = new Arbol();
             using (var stream = new FileStream(ruta, FileMode.Open))
             {
                 using (var reader = new BinaryReader(stream))
@@ -53,32 +52,10 @@ namespace Laboratorio1_ED2.Helpers
 
                 }
                 ArbolHuffman.armarArbol(letters);
-            }
-        }
-        public void EscrituraArchivo(string ruta, BitArray bits)
-        {
 
-            if (!File.Exists(ruta + @"\" + "FoldrA Guardar" + @"\" + "datosa meter" + "ArchivoComprimido.huff"))
-            {
-                //getfileName para nombrar el archivo comprimido
-                using (System.IO.StreamWriter streamWriter = new System.IO.StreamWriter(ruta + @"\" + "Arbol" + @"\" + "VALORES" + tabla.ToUpper() + ".arbol"))
-                {
-
-                    streamWriter.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(bits));
-                    streamWriter.Close();
-                }
-
+                arbol.EscrituraArchivo(nombre, rutaEscritura, arbol.armarArbol(letters), arbol.DiccionarioFrecuencia);
             }
 
-
-
-            //string completa = ruta + ".huff"; //PASARLO SOLO A .HUFF DENTRO DE UNA CARPETA
-            //var writer = new StreamWriter(ruta);
-            //for (int i = 0; i < bits.Length; i++)
-            //{
-            //    writer.Write(bits[i]);
-            //}
-            //writer.Close();
         }
     }
 }

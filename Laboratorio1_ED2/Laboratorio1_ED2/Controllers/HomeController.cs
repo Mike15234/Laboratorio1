@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Laboratorio1_ED2.Controllers;
 using Laboratorio1_ED2.Helpers;
 using System.IO;
+using Laboratorio1_ED2.HuffmanTree;
 
 namespace Laboratorio1_ED2.Controllers
 {
@@ -28,8 +29,8 @@ namespace Laboratorio1_ED2.Controllers
             return View();
         }
         //Post SubirArchivo
-
-
+        
+            
         [HttpPost]
         public ActionResult SubirArchivo(HttpPostedFileBase file)
         {
@@ -50,9 +51,38 @@ namespace Laboratorio1_ED2.Controllers
                     NuevaRuta += Direccion[i] + "/";
                 }
                 filePath = NuevaRuta + Path.GetFileName(file.FileName);
-                Data.Instancia.LecturaArchivo(filePath);
-        }
+                Data.Instancia.LecturaArchivo(filePath,fileName,path);
+            }
             return View();
+        }
+
+
+        //DOWNLOAD
+        public ActionResult Download()
+        {
+            string path = Server.MapPath("~/Descargas");
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            FileInfo[] files = dirInfo.GetFiles("*.*");
+            List<string> listaDescargas = new List<string>(files.Length);
+            foreach (var item in files)
+            {
+                listaDescargas.Add(item.Name);
+            }
+            return View(listaDescargas);
+        }
+        //HAY QUE CAMBIAR PARA QUE NO SEA SOLO IAMGENES, SINO CUALQUIERA Y QUE SEA LA LISTA DE NUESTROS ARCHIVOS GUARDADOS NADA MAS
+        //pero no recuerdo como dijo godoy que era gg
+        public ActionResult DownloadFile (string filename)
+        {
+            if (Path.GetExtension(filename) == ".png")
+            {
+                string fullpath = Path.Combine(Server.MapPath("~/Descargas"), filename);
+                return File(fullpath, "Images/png");
+            }
+            else
+            {
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
+            }
         }
     }
 }

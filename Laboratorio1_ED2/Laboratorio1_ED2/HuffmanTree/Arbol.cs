@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using Laboratorio1_ED2.Helpers;
+using Newtonsoft.Json;
 
 namespace Laboratorio1_ED2.HuffmanTree
 {
@@ -16,7 +17,7 @@ namespace Laboratorio1_ED2.HuffmanTree
         Nodo nodo = new Nodo();
         
 
-        public void armarArbol(string TextoCompleto) //arma el arbol con su tabla de probabilidades
+        public BitArray armarArbol(string TextoCompleto) //arma el arbol con su tabla de probabilidades
         {
             for (var i = 0; i < TextoCompleto.Length; i++)
             {
@@ -53,7 +54,7 @@ namespace Laboratorio1_ED2.HuffmanTree
 
             }
 
-            Cifrado(TextoCompleto);
+            return(Cifrado(TextoCompleto));
 
     }
         public BitArray Cifrado (string textoCompleto)//cifra el texto de manera que se asignen los binario
@@ -68,7 +69,50 @@ namespace Laboratorio1_ED2.HuffmanTree
             return bits;
         }
 
-        public string Desifrado (BitArray bits)//deshace el codigo ya cifrado
+        //
+        public void EscrituraArchivo(string nombreArchivo, string ruta, BitArray bits, Dictionary<char,double> Diccionario)
+        {
+            string NuevaRutaA = "";
+            string RutaArchivos = ruta + @"\" + "Comprimidos";
+            string[] Direccion2 = RutaArchivos.Split('\\');
+            string[] Nombresucci = nombreArchivo.Split('.');
+
+            for (var i = 0; i < Direccion2.Length; i++)
+            {
+                NuevaRutaA += Direccion2[i] + "/";
+            }
+
+            string texto = "";
+
+            for (var i = 0;  i < bits.Length; i++)
+            {
+                if (bits[i])
+                {
+                    texto += "1";
+                }
+                else
+                {
+                    texto += 0;
+                }
+                
+            }
+            NuevaRutaA += Nombresucci[0].ToUpper() + ".huff";
+            //var Adecimal = Convert.ToInt32(,2);
+            if (!File.Exists(NuevaRutaA))
+            {
+                //getfileName para nombrar el archivo comprimido
+                using (System.IO.StreamWriter streamWriter = new System.IO.StreamWriter(NuevaRutaA))
+                {
+                    streamWriter.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(Diccionario));
+                    streamWriter.WriteLine(texto);
+                    streamWriter.Close();
+                }
+            }
+        }
+    
+
+
+    public string Desifrado (BitArray bits)//deshace el codigo ya cifrado
         {
             Nodo actual = this.Raiz;
             string decodificado = "";
