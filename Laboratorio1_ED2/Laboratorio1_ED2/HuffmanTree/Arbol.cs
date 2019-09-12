@@ -70,7 +70,15 @@ namespace Laboratorio1_ED2.HuffmanTree
         }
 
         //
-        public void EscrituraArchivo(string nombreArchivo, string ruta, BitArray bits, Dictionary<char,double> Diccionario)
+
+        public static byte[] BitsaBytes(BitArray bits)
+        {
+            byte[] ret = new byte[(bits.Length - 1) / 8 + 1];
+            bits.CopyTo(ret, 0);
+            return ret;
+        }
+
+        public void EscrituraArchivo(string nombreArchivo, string ruta, BitArray bits, Dictionary<char,double> Diccionario, double F)
         {
             string NuevaRutaA = "";
             string RutaArchivos = ruta + @"\" + "Comprimidos";
@@ -81,21 +89,15 @@ namespace Laboratorio1_ED2.HuffmanTree
             {
                 NuevaRutaA += Direccion2[i] + "/";
             }
+           byte[] Bytes = BitsaBytes(bits);
+            string texto = BitConverter.ToString(BitsaBytes(bits));
+            //;
+            //for (var i = 0; i < bits.Length; i++)
+            //{
+            //    texto+=Bytes[i];
+            //}
 
-            string texto = "";
 
-            for (var i = 0;  i < bits.Length; i++)
-            {
-                if (bits[i])
-                {
-                    texto += "1";
-                }
-                else
-                {
-                    texto += 0;
-                }
-                
-            }
             NuevaRutaA += Nombresucci[0].ToUpper() + ".huff";
             //var Adecimal = Convert.ToInt32(,2);
             if (!File.Exists(NuevaRutaA))

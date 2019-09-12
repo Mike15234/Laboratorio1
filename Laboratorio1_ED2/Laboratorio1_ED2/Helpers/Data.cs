@@ -24,19 +24,19 @@ namespace Laboratorio1_ED2.Helpers
                 }
                 return instancia;
             }
-        }
-
-
+        }        
         Arbol ArbolHuffman = new Arbol();
         Nodo nodo = new Nodo();
-    
+        List<ListaComprimidos> Comprimidos = new List<ListaComprimidos>();
+
+
         public bool Inicial = true;
         string store = string.Empty; //distintos caracteres en un string
 
         List<Nodo> OrdenProbabilidades = new List<Nodo>();
         const int bufferLength = 1000;
         string letters;
-        public void LecturaArchivo(string ruta, string nombre, string rutaEscritura) //LEE EL ARCHIVO
+        public void LecturaArchivo(string ruta, string nombre, string rutaEscritura,double f) //LEE EL ARCHIVO
         {
             HuffmanTree.Arbol arbol = new Arbol();
             using (var stream = new FileStream(ruta, FileMode.Open))
@@ -53,10 +53,11 @@ namespace Laboratorio1_ED2.Helpers
                 }
                 ArbolHuffman.armarArbol(letters);
 
-                arbol.EscrituraArchivo(nombre, rutaEscritura, arbol.armarArbol(letters), arbol.DiccionarioFrecuencia);
+                arbol.EscrituraArchivo(nombre, rutaEscritura, arbol.armarArbol(letters), arbol.DiccionarioFrecuencia,f);
             }
 
         }
+
     }
 }
 
