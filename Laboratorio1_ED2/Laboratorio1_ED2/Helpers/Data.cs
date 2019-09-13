@@ -51,9 +51,9 @@ namespace Laboratorio1_ED2.Helpers
                     letters = System.Text.Encoding.ASCII.GetString(byteBuffer);
 
                 }
-                ArbolHuffman.armarArbol(letters);
+                
 
-                arbol.EscrituraArchivo(nombre, rutaEscritura, arbol.armarArbol(letters), arbol.DiccionarioFrecuencia,f);
+                arbol.EscrituraArchivo(nombre, rutaEscritura, ArbolHuffman.armarArbol(letters), arbol.DiccionarioFrecuencia,f);
             }
 
         }

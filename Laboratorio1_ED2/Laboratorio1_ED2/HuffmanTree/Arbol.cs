@@ -69,17 +69,66 @@ namespace Laboratorio1_ED2.HuffmanTree
             return bits;
         }
 
-        //
 
-        public static byte[] BitsaBytes(BitArray bits)
+        public string Byte(BitArray bits)
         {
-            byte[] ret = new byte[(bits.Length - 1) / 8 + 1];
-            bits.CopyTo(ret, 0);
-            return ret;
+            
+            if (bits.Count < 8)
+            {
+                throw new ArgumentException("bits");
+            }
+            string resultado = "";
+            byte[] bytes = new byte[1000];
+            for (var j = 0; j < bits.Count; j++)
+            {
+                    while ((j + 1) % 8 != 0)
+                    {
+                        if (bits[j])
+                        {
+                            resultado += "1";
+                        }
+                        else
+                        {
+                            resultado += "0";
+                        }
+                    }
+                    resultado += "-";
+                
+            }
+            // Si si asi ya solo le hacemos substring
+            int contador = 0;
+            string agregado = "";
+            string[] cadenas = resultado.Split('-');
+            if(cadenas[cadenas.Length-1].Length <8)
+            {
+                contador=8-cadenas[cadenas.Length - 1].Length;
+                for (int i = 0; i < contador; i++)
+                {
+                    agregado += "0";
+                }
+                cadenas[cadenas.Length - 1] = agregado + cadenas[cadenas.Length - 1];
+            }
+            //Probemoslo
+            return resultado;
         }
-
-        public void EscrituraArchivo(string nombreArchivo, string ruta, BitArray bits, Dictionary<char,double> Diccionario, double F)
+        public static ulong BitArrayToU64(BitArray ba)
         {
+            var len = Math.Min(64, ba.Count);
+            ulong n = 0;
+            for (int i = 0; i < len; i++)
+            {
+                if (ba.Get(i))
+                    n |= 1UL << i;
+            }
+            return n;
+        }
+        public static string ToDebugString<Key, Value>(Dictionary<char, double> dictionary)//SI SIRVE
+        {
+            return "{" + string.Join(",", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray()) + "}";
+        }
+        public void EscrituraArchivo(string nombreArchivo, string ruta, BitArray bits, Dictionary<char, double> Diccionario, double F)
+        {
+            string d =ToDebugString<char,double>(Diccionario);
             string NuevaRutaA = "";
             string RutaArchivos = ruta + @"\" + "Comprimidos";
             string[] Direccion2 = RutaArchivos.Split('\\');
@@ -89,28 +138,41 @@ namespace Laboratorio1_ED2.HuffmanTree
             {
                 NuevaRutaA += Direccion2[i] + "/";
             }
-           byte[] Bytes = BitsaBytes(bits);
-            string texto = BitConverter.ToString(BitsaBytes(bits));
-            //;
-            //for (var i = 0; i < bits.Length; i++)
-            //{
-            //    texto+=Bytes[i];
-            //}
-
 
             NuevaRutaA += Nombresucci[0].ToUpper() + ".huff";
+            var resultado = Convert.ToInt16(Byte(bits), 2);
+            string esto = Byte(bits);
+            string[] cadenas=esto.Split('-');
+            //Cadenas es lo que luego van a escribir? 
+            //CADENAS es el codigo de binario
+            //for (var i = 0; i < cadenas.Length; i++)
+            //{
+            //    cadenas[i]=System.Text.Encoding.ASCII.GetString(cadenas[i]);
+            //}
+            string codigo = Byte(bits)+d;
+            byte[] array = System.Text.Encoding.ASCII.GetBytes(codigo);
+            ulong pruebucci = BitArrayToU64(bits);
+            int sos=Convert.ToInt32(pruebucci);
+            codigo = System.Text.ASCIIEncoding.GetEncoding(sos)+d;
+
             //var Adecimal = Convert.ToInt32(,2);
             if (!File.Exists(NuevaRutaA))
             {
+                //BinaryWriter Writer = new BinaryWriter(File.OpenWrite(NuevaRutaA));
+                //Writer.Write(Diccionario);
                 //getfileName para nombrar el archivo comprimido
-                using (System.IO.StreamWriter streamWriter = new System.IO.StreamWriter(NuevaRutaA))
-                {
-                    streamWriter.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(Diccionario));
-                    streamWriter.WriteLine(texto);
-                    streamWriter.Close();
-                }
+                //using (System.IO.StreamWriter streamWriter = new System.IO.StreamWriter(NuevaRutaA))
+                //{
+
+                    //streamWriter.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(Diccionario));
+                    File.WriteAllBytes(NuevaRutaA, array);
+                //    streamWriter.Close();
+
+                //} 
+                
             }
         }
+        
     
 
 

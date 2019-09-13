@@ -34,8 +34,7 @@ namespace Laboratorio1_ED2.Controllers
         [HttpPost]
         public ActionResult SubirArchivo(HttpPostedFileBase file)
         {
-            FileInfo Archivo = new FileInfo("C:\\miArchivo.txt");
-            var f = Archivo.Length;
+            
             var fileName = Path.GetFileName(file.FileName);//obtenemos el nombre del archivo a cargar
             file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//guardamos el archivo en la ruta física que corresponde a la ruta virtual del archivo
             string filePath = string.Empty;
@@ -53,6 +52,8 @@ namespace Laboratorio1_ED2.Controllers
                     NuevaRuta += Direccion[i] + "/";
                 }
                 filePath = NuevaRuta + Path.GetFileName(file.FileName);
+                FileInfo Archivo = new FileInfo(filePath);
+                var f = Archivo.Length;
                 Data.Instancia.LecturaArchivo(filePath,fileName,path,f);
             }
             return View();
