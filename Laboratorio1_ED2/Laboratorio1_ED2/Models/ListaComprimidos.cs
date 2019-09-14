@@ -11,6 +11,5 @@ namespace Laboratorio1_ED2.Models
         public double RazonCompresio { get; set; }
         public double FactorCompresion { get; set; }
         public double PorcentajeCompresion { get; set; }
-
     }
 }

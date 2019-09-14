@@ -14,9 +14,9 @@ namespace Laboratorio1_ED2.HuffmanTree
         private List<Nodo> ListaNodos = new List<Nodo>();
         public Nodo Raiz { get; set; }
         public Dictionary<char, double> DiccionarioFrecuencia = new Dictionary<char, double>();
+        public Dictionary<char, List<bool>> DiccionarioAux = new Dictionary<char, List<bool>>();
         Nodo nodo = new Nodo();
         
-
         public BitArray armarArbol(string TextoCompleto) //arma el arbol con su tabla de probabilidades
         {
             for (var i = 0; i < TextoCompleto.Length; i++)
@@ -63,14 +63,13 @@ namespace Laboratorio1_ED2.HuffmanTree
             for (var i = 0; i < textoCompleto.Length; i++)
             {
                 List<bool> ConvertirCaracter = this.Raiz.Patron(textoCompleto[i], new List<bool>());
+               // DiccionarioAux.Add(textoCompleto[i], ConvertirCaracter);////////
                 ConvertirTextoBinario.AddRange(ConvertirCaracter);
             }
             BitArray bits = new BitArray(ConvertirTextoBinario.ToArray());
             return bits;
         }
-
-
-        public byte[] Byte(BitArray bits)
+        public byte[] Byte(BitArray bits)//Separacion de bits
         {
             
             if (bits.Count < 8)
@@ -131,7 +130,6 @@ namespace Laboratorio1_ED2.HuffmanTree
                 }
                 cadenas[cadenas.Length - 1] = agregado + cadenas[cadenas.Length - 1];
             }
-
             byte[] sos = new byte [cadenas.Length];
             for (int i = 0; i < cadenas.Length; i++)
             {
@@ -141,18 +139,17 @@ namespace Laboratorio1_ED2.HuffmanTree
 
             return sos;
         }
-        
         public static string ToDebugString<Key, Value>(Dictionary<char, double> dictionary)//SI SIRVE
         {
             return "{" + string.Join(",", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray()) + "}";
         }
-
-
         public void EscrituraArchivo(string nombreArchivo, string ruta, BitArray bits, Dictionary<char, double> Diccionario)
         {
+            FileInfo fi = new FileInfo(nombreArchivo);
             string d =ToDebugString<char,double>(Diccionario);
+            string aux = ToDebugString<char, List<bool>>(Diccionario);
             string NuevaRutaA = "";
-            string RutaArchivos = ruta + @"\" + "Comprimidos";
+            string RutaArchivos = ruta;// + @"\" + "Comprimidos";
             string[] Direccion2 = RutaArchivos.Split('\\');
             string[] Nombresucci = nombreArchivo.Split('.');
 
@@ -171,8 +168,10 @@ namespace Laboratorio1_ED2.HuffmanTree
                 {
                     using (var writer = new BinaryWriter(writeStream1))
                     {
+                        //writer.Write(aux + "|");
                         foreach (var item in este)
                         {
+                           
                             writer.Write(item);
                         }
                         writer.Close();
@@ -180,13 +179,33 @@ namespace Laboratorio1_ED2.HuffmanTree
                     writeStream1.Close();
                 }
             }
+            //double tamanioOriginal = fi.Length;
+            long length = new System.IO.FileInfo(NuevaRutaA).Length;
+            //Data.Instancia.lista(Data.Instancia.Operaciones(Nombresucci[0], tamanioOriginal, length));
         }
 
-       
 
-
-        public string Desifrado (BitArray bits)//deshace el codigo ya cifrado
+        public string Desifrado (string ruta)//deshace el codigo ya cifrado
         {
+            const int bufferLength = 1000000000;
+            var byteBuffer = new byte[bufferLength];
+            
+            using (var stream = new FileStream(ruta, FileMode.Open))
+            {
+                using (var reader = new BinaryReader(stream))
+                {
+                    while (reader.BaseStream.Position != reader.BaseStream.Length)
+                    {
+                        byteBuffer = reader.ReadBytes(bufferLength);  
+                    }
+                    reader.Close();
+                }
+            }
+            byte[] bytes = new byte[byteBuffer.Length];
+
+            BitArray bits = new BitArray(bytes);
+
+            /////////////////////////////////////////////////////////////////////
             Nodo actual = this.Raiz;
             string decodificado = "";
             foreach (bool bit in bits)
@@ -200,7 +219,7 @@ namespace Laboratorio1_ED2.HuffmanTree
                 }
                 else
                 {
-                    if (actual.Izquierda != null)
+                    if (actual.Izquierda != null )
                     {
                         actual = actual.Izquierda;
                     }
@@ -213,7 +232,7 @@ namespace Laboratorio1_ED2.HuffmanTree
             }
             return decodificado;
         }
-        public bool Hoja (Nodo NodoValidado)//chequea los nodos ...
+        public bool Hoja (Nodo NodoValidado)
         {
             return (NodoValidado.Izquierda == null && NodoValidado.Derecha == null);
         }

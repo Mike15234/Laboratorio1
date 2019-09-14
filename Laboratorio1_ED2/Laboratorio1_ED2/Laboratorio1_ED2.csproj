@@ -173,6 +173,7 @@
     <Content Include="Views\Home\SubirArchivo.cshtml" />
     <Content Include="Views\Home\Download.cshtml" />
     <Content Include="Views\Home\DescompresionArchivo.cshtml" />
+    <Content Include="Views\Home\Listado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

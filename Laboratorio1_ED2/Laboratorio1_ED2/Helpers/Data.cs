@@ -28,7 +28,7 @@ namespace Laboratorio1_ED2.Helpers
         Arbol ArbolHuffman = new Arbol();
         Nodo nodo = new Nodo();
         List<ListaComprimidos> Comprimidos = new List<ListaComprimidos>();
-
+        ListaComprimidos archivo = new ListaComprimidos();
 
         public bool Inicial = true;
         string store = string.Empty; //distintos caracteres en un string
@@ -57,15 +57,52 @@ namespace Laboratorio1_ED2.Helpers
                 }
                 else
                 {
-                    //DEcompresion
+                    string NuevaRutaD = "";
+                    string RutaArchivos = ruta;// + @"\" + "Descomprimidos";
+                    string[] Direccion1 = RutaArchivos.Split('\\');
+                    string[] nombredes = nombre.Split('.');
 
+                    for (var i = 0; i < Direccion1.Length; i++)
+                    {
+                        NuevaRutaD += Direccion1[i] + "/";
+                    }
+                    NuevaRutaD += nombredes[0].ToUpper() + ".txt";
 
+                    if (!File.Exists(NuevaRutaD))
+                    {
+                        using (var writeStream1 = new FileStream(NuevaRutaD, FileMode.OpenOrCreate))
+                        {
+                            using (var writer = new BinaryWriter(writeStream1))
+                            {
+                                writer.Write(arbol.Desifrado(NuevaRutaD));
+                                writer.Close();
+                            }
+                            writeStream1.Close();
+                        }
+                    }
+                    
                 }
                 
             }
         }
 
-        
+        public ListaComprimidos Operaciones(string name, double original, long comprimido)
+        {
+            double factorCompresion = original / comprimido;
+            double razonCompresion = comprimido / original;
+            double porcentaje = 1 - razonCompresion;
+            archivo.NombreArchivo = name;
+            archivo.FactorCompresion = factorCompresion;
+            archivo.RazonCompresio = razonCompresion;
+            archivo.PorcentajeCompresion = porcentaje;
+            
+            return archivo;
+        }
+        public List<ListaComprimidos> lista(ListaComprimidos archivo)
+        {
+            Comprimidos.Add(archivo);
+            return Comprimidos;
+        }
 
     }
 }
