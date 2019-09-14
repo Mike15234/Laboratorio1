@@ -36,7 +36,7 @@ namespace Laboratorio1_ED2.Helpers
         List<Nodo> OrdenProbabilidades = new List<Nodo>();
         const int bufferLength = 1000;
         string letters;
-        public void LecturaArchivo(string ruta, string nombre, string rutaEscritura,double f) //LEE EL ARCHIVO
+        public void LecturaArchivo(string ruta, string nombre, string rutaEscritura) //LEE EL ARCHIVO
         {
             HuffmanTree.Arbol arbol = new Arbol();
             using (var stream = new FileStream(ruta, FileMode.Open))
@@ -51,9 +51,9 @@ namespace Laboratorio1_ED2.Helpers
                     letters = System.Text.Encoding.ASCII.GetString(byteBuffer);
 
                 }
-                
-
-                arbol.EscrituraArchivo(nombre, rutaEscritura, ArbolHuffman.armarArbol(letters), arbol.DiccionarioFrecuencia,f);
+                ArbolHuffman.armarArbol(letters);
+                BitArray codigo = ArbolHuffman.armarArbol(letters);
+                arbol.EscrituraArchivo(nombre, rutaEscritura, codigo, arbol.DiccionarioFrecuencia);
             }
 
         }

@@ -70,7 +70,7 @@ namespace Laboratorio1_ED2.HuffmanTree
         }
 
 
-        public string Byte(BitArray bits)
+        public byte[] Byte(BitArray bits)
         {
             
             if (bits.Count < 8)
@@ -79,9 +79,22 @@ namespace Laboratorio1_ED2.HuffmanTree
             }
             string resultado = "";
             byte[] bytes = new byte[1000];
-            for (var j = 0; j < bits.Count; j++)
+            for (int i = 0; i <= 7; i++)
             {
-                    while ((j + 1) % 8 != 0)
+                if (bits[i])
+                {
+                    resultado += "1";
+                }
+                else
+                {
+                    resultado += "0";
+                }
+            }
+            
+            for (var j = 8; j < bits.Count; j++)
+            {
+               
+                    if ((j) % 8 != 0)
                     {
                         if (bits[j])
                         {
@@ -92,41 +105,50 @@ namespace Laboratorio1_ED2.HuffmanTree
                             resultado += "0";
                         }
                     }
+                else 
+                {
                     resultado += "-";
-                
+                    if (bits[j])
+                    {
+                        resultado += "1";
+                    }
+                    else
+                    {
+                        resultado += "0";
+                    }
+                }
             }
-            // Si si asi ya solo le hacemos substring
             int contador = 0;
             string agregado = "";
             string[] cadenas = resultado.Split('-');
-            if(cadenas[cadenas.Length-1].Length <8)
+            int total = cadenas[cadenas.Length - 1].Length;
+            if(total<8)
             {
-                contador=8-cadenas[cadenas.Length - 1].Length;
+                contador=8-total;
                 for (int i = 0; i < contador; i++)
                 {
                     agregado += "0";
                 }
                 cadenas[cadenas.Length - 1] = agregado + cadenas[cadenas.Length - 1];
             }
-            //Probemoslo
-            return resultado;
-        }
-        public static ulong BitArrayToU64(BitArray ba)
-        {
-            var len = Math.Min(64, ba.Count);
-            ulong n = 0;
-            for (int i = 0; i < len; i++)
+
+            byte[] sos = new byte [cadenas.Length];
+            for (int i = 0; i < cadenas.Length; i++)
             {
-                if (ba.Get(i))
-                    n |= 1UL << i;
+                sos[i] = Convert.ToByte(cadenas[i], 2);
+
             }
-            return n;
+
+            return sos;
         }
+        
         public static string ToDebugString<Key, Value>(Dictionary<char, double> dictionary)//SI SIRVE
         {
             return "{" + string.Join(",", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray()) + "}";
         }
-        public void EscrituraArchivo(string nombreArchivo, string ruta, BitArray bits, Dictionary<char, double> Diccionario, double F)
+
+
+        public void EscrituraArchivo(string nombreArchivo, string ruta, BitArray bits, Dictionary<char, double> Diccionario)
         {
             string d =ToDebugString<char,double>(Diccionario);
             string NuevaRutaA = "";
@@ -138,45 +160,32 @@ namespace Laboratorio1_ED2.HuffmanTree
             {
                 NuevaRutaA += Direccion2[i] + "/";
             }
-
+            
             NuevaRutaA += Nombresucci[0].ToUpper() + ".huff";
-            var resultado = Convert.ToInt16(Byte(bits), 2);
-            string esto = Byte(bits);
-            string[] cadenas=esto.Split('-');
-            //Cadenas es lo que luego van a escribir? 
-            //CADENAS es el codigo de binario
-            //for (var i = 0; i < cadenas.Length; i++)
-            //{
-            //    cadenas[i]=System.Text.Encoding.ASCII.GetString(cadenas[i]);
-            //}
-            string codigo = Byte(bits)+d;
-            byte[] array = System.Text.Encoding.ASCII.GetBytes(codigo);
-            ulong pruebucci = BitArrayToU64(bits);
-            int sos=Convert.ToInt32(pruebucci);
-            codigo = System.Text.ASCIIEncoding.GetEncoding(sos)+d;
 
-            //var Adecimal = Convert.ToInt32(,2);
+             byte[] este=  Byte(bits);//Vector con grupos de 8
+            
             if (!File.Exists(NuevaRutaA))
             {
-                //BinaryWriter Writer = new BinaryWriter(File.OpenWrite(NuevaRutaA));
-                //Writer.Write(Diccionario);
-                //getfileName para nombrar el archivo comprimido
-                //using (System.IO.StreamWriter streamWriter = new System.IO.StreamWriter(NuevaRutaA))
-                //{
-
-                    //streamWriter.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(Diccionario));
-                    File.WriteAllBytes(NuevaRutaA, array);
-                //    streamWriter.Close();
-
-                //} 
-                
+                using (var writeStream1 = new FileStream(NuevaRutaA, FileMode.OpenOrCreate))
+                {
+                    using (var writer = new BinaryWriter(writeStream1))
+                    {
+                        foreach (var item in este)
+                        {
+                            writer.Write(item);
+                        }
+                        writer.Close();
+                    }
+                    writeStream1.Close();
+                }
             }
         }
-        
-    
+
+       
 
 
-    public string Desifrado (BitArray bits)//deshace el codigo ya cifrado
+        public string Desifrado (BitArray bits)//deshace el codigo ya cifrado
         {
             Nodo actual = this.Raiz;
             string decodificado = "";

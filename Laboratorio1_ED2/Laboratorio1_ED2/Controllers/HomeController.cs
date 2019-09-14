@@ -52,9 +52,7 @@ namespace Laboratorio1_ED2.Controllers
                     NuevaRuta += Direccion[i] + "/";
                 }
                 filePath = NuevaRuta + Path.GetFileName(file.FileName);
-                FileInfo Archivo = new FileInfo(filePath);
-                var f = Archivo.Length;
-                Data.Instancia.LecturaArchivo(filePath,fileName,path,f);
+                Data.Instancia.LecturaArchivo(filePath,fileName,path);
             }
             return View();
         }
