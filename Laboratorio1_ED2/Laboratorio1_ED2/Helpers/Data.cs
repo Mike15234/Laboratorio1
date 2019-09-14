@@ -24,7 +24,7 @@ namespace Laboratorio1_ED2.Helpers
                 }
                 return instancia;
             }
-        }        
+        }
         Arbol ArbolHuffman = new Arbol();
         Nodo nodo = new Nodo();
         List<ListaComprimidos> Comprimidos = new List<ListaComprimidos>();
@@ -36,7 +36,7 @@ namespace Laboratorio1_ED2.Helpers
         List<Nodo> OrdenProbabilidades = new List<Nodo>();
         const int bufferLength = 1000;
         string letters;
-        public void LecturaArchivo(string ruta, string nombre, string rutaEscritura) //LEE EL ARCHIVO
+        public void LecturaArchivo(string ruta, string nombre, string rutaEscritura, int def) //LEE EL ARCHIVO
         {
             HuffmanTree.Arbol arbol = new Arbol();
             using (var stream = new FileStream(ruta, FileMode.Open))
@@ -51,16 +51,21 @@ namespace Laboratorio1_ED2.Helpers
                     letters = System.Text.Encoding.ASCII.GetString(byteBuffer);
 
                 }
-                ArbolHuffman.armarArbol(letters);
-                BitArray codigo = ArbolHuffman.armarArbol(letters);
-                arbol.EscrituraArchivo(nombre, rutaEscritura, codigo, arbol.DiccionarioFrecuencia);
-            }
+                if(def == 0)
+                {
+                    arbol.EscrituraArchivo(nombre, rutaEscritura, ArbolHuffman.armarArbol(letters), arbol.DiccionarioFrecuencia);
+                }
+                else
+                {
+                    //DEcompresion
 
+
+                }
+                
+            }
         }
+
+        
 
     }
 }
-
-//Guardar diccionario con prefijos y caracteres.
-//Reescribir el texto con codigos 
-//Documento ".Huff" que guarde el diccionario y el codigo.
