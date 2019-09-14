@@ -63,7 +63,7 @@ namespace Laboratorio1_ED2.HuffmanTree
             for (var i = 0; i < textoCompleto.Length; i++)
             {
                 List<bool> ConvertirCaracter = this.Raiz.Patron(textoCompleto[i], new List<bool>());
-               // DiccionarioAux.Add(textoCompleto[i], ConvertirCaracter);////////
+               
                 ConvertirTextoBinario.AddRange(ConvertirCaracter);
             }
             BitArray bits = new BitArray(ConvertirTextoBinario.ToArray());
@@ -149,7 +149,7 @@ namespace Laboratorio1_ED2.HuffmanTree
             string d =ToDebugString<char,double>(Diccionario);
             string aux = ToDebugString<char, List<bool>>(Diccionario);
             string NuevaRutaA = "";
-            string RutaArchivos = ruta;// + @"\" + "Comprimidos";
+            string RutaArchivos = ruta;
             string[] Direccion2 = RutaArchivos.Split('\\');
             string[] Nombresucci = nombreArchivo.Split('.');
 
@@ -168,7 +168,6 @@ namespace Laboratorio1_ED2.HuffmanTree
                 {
                     using (var writer = new BinaryWriter(writeStream1))
                     {
-                        //writer.Write(aux + "|");
                         foreach (var item in este)
                         {
                            
@@ -179,9 +178,8 @@ namespace Laboratorio1_ED2.HuffmanTree
                     writeStream1.Close();
                 }
             }
-            //double tamanioOriginal = fi.Length;
+            
             long length = new System.IO.FileInfo(NuevaRutaA).Length;
-            //Data.Instancia.lista(Data.Instancia.Operaciones(Nombresucci[0], tamanioOriginal, length));
         }
 
 

@@ -102,10 +102,7 @@ namespace Laboratorio1_ED2.Controllers
                 
             }
         }
-    
-        
-
-        //DOWNLOAD
+    //DOWNLOAD
         public ActionResult Download()
         {
             string path = Server.MapPath("~/Descargas");
@@ -118,8 +115,7 @@ namespace Laboratorio1_ED2.Controllers
             }
             return View(listaDescargas);
         }
-        //HAY QUE CAMBIAR PARA QUE NO SEA SOLO IAMGENES, SINO CUALQUIERA Y QUE SEA LA LISTA DE NUESTROS ARCHIVOS GUARDADOS NADA MAS
-        //pero no recuerdo como dijo godoy que era gg
+        
         public ActionResult DownloadFile (string filename)
         {
             if (Path.GetExtension(filename) == ".png")
