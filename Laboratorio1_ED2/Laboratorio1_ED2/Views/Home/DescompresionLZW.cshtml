@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "DescompresionLZW";
+}
+
+
+@model Laboratorio1_ED2.Models.SubirArchivoModel
+@{
+    ViewBag.Title = "DescompresionArchivo";
+}
+
+
+<h2>DescompresionLZW</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <button type="submit">DESCOMPRESIÓN LZW</button>
+</form>
+
+
+
+@Html.ActionLink("Regresar", "SubirLZW")
+@Html.ActionLink("| Ir a Descargas", "Listado")

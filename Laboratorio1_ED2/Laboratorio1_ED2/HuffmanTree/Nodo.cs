@@ -13,7 +13,7 @@ namespace Laboratorio1_ED2.HuffmanTree
         public Nodo Derecha { get; set; }
         public List<bool>
 
-        Patron(char Caracter, List<bool> data)
+        Patron(char Caracter, List<bool> data)//Crea patron para prefijos
         {
             if (Derecha==null && Izquierda==null)
             {

@@ -3,7 +3,7 @@
     ViewBag.Title = "DescompresionArchivos";
 }
 
-<h2>Descompresion</h2>
+<h2>Descompresion Huffman</h2>
 
 @model Laboratorio1_ED2.Models.SubirArchivoModel
 @{
@@ -17,7 +17,10 @@
 
 <form method="post" enctype="multipart/form-data">
     <input type="file" name="file" />
-    <button type="submit">Subir</button>
+    <button type="submit">DESCOMPRESIÓN HUFFMAN</button>
 </form>
 
 
+@Html.ActionLink("Subir Archivo con HUffman", "SubirArchivo")
+
+@Html.ActionLink("| Ir a Descargas", "Listado")

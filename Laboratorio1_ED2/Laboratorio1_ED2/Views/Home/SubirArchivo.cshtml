@@ -5,15 +5,19 @@
 
 <h2>SubirArchivo</h2>
 
-<h2>Carga</h2>
+<h2>HUFFMAN</h2>
 
 <h2 class="text-danger">@ViewBag.Error</h2>
 <h2 class="text-success">@ViewBag.Correcto</h2>
 
 <form method="post" enctype="multipart/form-data">
     <input type="file" name="file" />
-    <button type="submit">Subir</button>
+    <button type="submit">HUFFMAN Compress</button>
 </form>
-@Html.ActionLink("Ir a descargar", "Download")
-@Html.ActionLink("| Realizar Descompresion", "DescompresionArchivo")
+
+
+
+@Html.ActionLink("| Realizar Descompresión ", "DescompresionArchivo")
+@Html.ActionLink("| REALIZAR POR MEDIO DE LZW", "SubirLZW")
 @Html.ActionLink("| Datos de Compresion", "Listado")
+@Html.ActionLink("| Ir a Descargas", "Donwloads")

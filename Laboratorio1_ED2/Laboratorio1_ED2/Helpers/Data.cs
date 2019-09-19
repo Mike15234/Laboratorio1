@@ -25,68 +25,49 @@ namespace Laboratorio1_ED2.Helpers
                 return instancia;
             }
         }
+
         Arbol ArbolHuffman = new Arbol();
         Nodo nodo = new Nodo();
         List<ListaComprimidos> Comprimidos = new List<ListaComprimidos>();
         ListaComprimidos archivo = new ListaComprimidos();
 
         public bool Inicial = true;
-        string store = string.Empty; //distintos caracteres en un string
-
-        List<Nodo> OrdenProbabilidades = new List<Nodo>();
         const int bufferLength = 1000;
         string letters;
+
         public void LecturaArchivo(string ruta, string nombre, string rutaEscritura, int def) //LEE EL ARCHIVO
         {
             HuffmanTree.Arbol arbol = new Arbol();
-            using (var stream = new FileStream(ruta, FileMode.Open))
-            {
-                using (var reader = new BinaryReader(stream))
+            
+                if (def == 0)
                 {
-                    var byteBuffer = new byte[bufferLength];
-                    while (reader.BaseStream.Position != reader.BaseStream.Length)
+                using (var stream = new FileStream(ruta, FileMode.Open))
+                {
+                    using (var reader = new BinaryReader(stream))
                     {
-                        byteBuffer = reader.ReadBytes(bufferLength);
-                    }
-                    letters = System.Text.Encoding.ASCII.GetString(byteBuffer);
+                        var byteBuffer = new byte[bufferLength];
+                        while (reader.BaseStream.Position != reader.BaseStream.Length)
+                        {
+                            byteBuffer = reader.ReadBytes(bufferLength);
+                        }
+                        letters = System.Text.Encoding.ASCII.GetString(byteBuffer);
 
+                    }
                 }
-                if(def == 0)
-                {
-                    arbol.EscrituraArchivo(nombre, rutaEscritura, ArbolHuffman.armarArbol(letters), arbol.DiccionarioFrecuencia);
+
+                arbol.EscrituraArchivo(nombre, rutaEscritura,arbol.armarArbol(arbol.ArmarDiccionario(letters),letters),arbol.ArmarDiccionario(letters));
                 }
                 else
                 {
-                    string NuevaRutaD = "";
-                    string RutaArchivos = ruta;// + @"\" + "Descomprimidos";
-                    string[] Direccion1 = RutaArchivos.Split('\\');
-                    string[] nombredes = nombre.Split('.');
 
-                    for (var i = 0; i < Direccion1.Length; i++)
-                    {
-                        NuevaRutaD += Direccion1[i] + "/";
-                    }
-                    NuevaRutaD += nombredes[0].ToUpper() + ".txt";
-
-                    if (!File.Exists(NuevaRutaD))
-                    {
-                        using (var writeStream1 = new FileStream(NuevaRutaD, FileMode.OpenOrCreate))
-                        {
-                            using (var writer = new BinaryWriter(writeStream1))
-                            {
-                                writer.Write(arbol.Desifrado(NuevaRutaD));
-                                writer.Close();
-                            }
-                            writeStream1.Close();
-                        }
-                    }
-                    
+                    string[] nuevo = nombre.Split('.');
+                    nuevo[1] = "OUTPUT.txt";
+                    string nuevoNombre = nuevo[0] + nuevo[1];
+                    string RutaOut = ruta + nuevoNombre;//CAMBIAR NOMBRE
                 }
-                
-            }
         }
 
-        public ListaComprimidos Operaciones(string name, double original, long comprimido)
+        public ListaComprimidos Operaciones(string name, double original, long comprimido)//Datos para vista de Comprimidos
         {
             double factorCompresion = original / comprimido;
             double razonCompresion = comprimido / original;
@@ -95,14 +76,13 @@ namespace Laboratorio1_ED2.Helpers
             archivo.FactorCompresion = factorCompresion;
             archivo.RazonCompresio = razonCompresion;
             archivo.PorcentajeCompresion = porcentaje;
-            
+            Comprimidos.Add(archivo);
             return archivo;
         }
-        public List<ListaComprimidos> lista(ListaComprimidos archivo)
+        public List<ListaComprimidos> lista(ListaComprimidos archivo)//Agregar los comprimidos a la lista 
         {
             Comprimidos.Add(archivo);
             return Comprimidos;
         }
-
     }
 }
