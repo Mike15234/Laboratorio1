@@ -13,8 +13,6 @@ namespace Laboratorio1_ED2.Controllers
 {
     public class HomeController : Controller
     {
-
-
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
@@ -34,12 +32,13 @@ namespace Laboratorio1_ED2.Controllers
 
             return View();
         }
+
         [HttpPost]
         public ActionResult SubirArchivo(HttpPostedFileBase file)
         {
 
-            var fileName = Path.GetFileName(file.FileName);//obtenemos el nombre del archivo a cargar
-            file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//guardamos el archivo en la ruta física que corresponde a la ruta virtual del archivo
+            var fileName = Path.GetFileName(file.FileName);//Nombre del archivo a cargar
+            file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//Guardado del archivo en la ruta física 
             string filePath = string.Empty;
             if (file != null)
             {
@@ -64,6 +63,7 @@ namespace Laboratorio1_ED2.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult DescompresionArchivo(HttpPostedFileBase file)
         {
@@ -95,9 +95,7 @@ namespace Laboratorio1_ED2.Controllers
             }
             else
             {
-              
-                    return View("SubirArchivo");
-                
+                    return View("SubirArchivo");   
             }
         }
 
@@ -108,10 +106,10 @@ namespace Laboratorio1_ED2.Controllers
 
             return View();
         }
+
         [HttpPost]
         public ActionResult SubirLZW(HttpPostedFileBase file)
         {
-
             var fileName = Path.GetFileName(file.FileName);//obtenemos el nombre del archivo a cargar
             file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//guardamos el archivo en la ruta física que corresponde a la ruta virtual del archivo
             string filePath = string.Empty;
@@ -138,6 +136,7 @@ namespace Laboratorio1_ED2.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult DescompresionLZW(HttpPostedFileBase file)
         {
@@ -168,21 +167,15 @@ namespace Laboratorio1_ED2.Controllers
             }
             else
             {
-
                 return View("SubirLZW");
-
             }
         }
-
-
-
 
         //DOWNLOAD
         public FileResult Download()
         {
             string examplePathToFile = Server.MapPath("~/Downloads/");
             string exampleMimeType = "*.*";
-
             return new FileStreamResult(new FileStream(examplePathToFile, FileMode.Open, FileAccess.Read), exampleMimeType);
         }
     }

@@ -25,22 +25,21 @@ namespace Laboratorio1_ED2.Helpers
                 return instancia;
             }
         }
+
         Arbol ArbolHuffman = new Arbol();
         Nodo nodo = new Nodo();
         List<ListaComprimidos> Comprimidos = new List<ListaComprimidos>();
         ListaComprimidos archivo = new ListaComprimidos();
 
         public bool Inicial = true;
-        string store = string.Empty; //distintos caracteres en un string
-
-        List<Nodo> OrdenProbabilidades = new List<Nodo>();
         const int bufferLength = 1000;
         string letters;
+
         public void LecturaArchivo(string ruta, string nombre, string rutaEscritura, int def) //LEE EL ARCHIVO
         {
             HuffmanTree.Arbol arbol = new Arbol();
             
-                if (def == 0)//lo va a leer
+                if (def == 0)
                 {
                 using (var stream = new FileStream(ruta, FileMode.Open))
                 {
@@ -58,20 +57,17 @@ namespace Laboratorio1_ED2.Helpers
 
                 arbol.EscrituraArchivo(nombre, rutaEscritura,arbol.armarArbol(arbol.ArmarDiccionario(letters),letters),arbol.ArmarDiccionario(letters));
                 }
-
-            else//si es uno lo va a escribir
+                else
                 {
-                string[] nuevo = nombre.Split('.');
-                nuevo[1] = "OUTPUT.txt";
-                string nuevoNombre = nuevo[0] + nuevo[1];
-                string RutaOut = ruta + nuevoNombre;//CAMVIAR NOMBRE
 
-            }
-
-            
+                    string[] nuevo = nombre.Split('.');
+                    nuevo[1] = "OUTPUT.txt";
+                    string nuevoNombre = nuevo[0] + nuevo[1];
+                    string RutaOut = ruta + nuevoNombre;//CAMBIAR NOMBRE
+                }
         }
 
-        public ListaComprimidos Operaciones(string name, double original, long comprimido)
+        public ListaComprimidos Operaciones(string name, double original, long comprimido)//Datos para vista de Comprimidos
         {
             double factorCompresion = original / comprimido;
             double razonCompresion = comprimido / original;
@@ -83,12 +79,10 @@ namespace Laboratorio1_ED2.Helpers
             Comprimidos.Add(archivo);
             return archivo;
         }
-        public List<ListaComprimidos> lista(ListaComprimidos archivo)
+        public List<ListaComprimidos> lista(ListaComprimidos archivo)//Agregar los comprimidos a la lista 
         {
             Comprimidos.Add(archivo);
             return Comprimidos;
         }
-
-
     }
 }

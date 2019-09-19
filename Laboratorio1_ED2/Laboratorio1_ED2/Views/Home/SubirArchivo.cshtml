@@ -10,8 +10,6 @@
 <h2 class="text-danger">@ViewBag.Error</h2>
 <h2 class="text-success">@ViewBag.Correcto</h2>
 
-@Html.ActionLink("| REALIZAR POR MEDIO DE LZW", "SubirLZW")
-
 <form method="post" enctype="multipart/form-data">
     <input type="file" name="file" />
     <button type="submit">HUFFMAN Compress</button>
@@ -20,6 +18,6 @@
 
 
 @Html.ActionLink("| Realizar Descompresión ", "DescompresionArchivo")
+@Html.ActionLink("| REALIZAR POR MEDIO DE LZW", "SubirLZW")
 @Html.ActionLink("| Datos de Compresion", "Listado")
-
 @Html.ActionLink("| Ir a Descargas", "Donwloads")

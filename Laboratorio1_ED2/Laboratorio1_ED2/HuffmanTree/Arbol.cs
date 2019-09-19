@@ -18,7 +18,65 @@ namespace Laboratorio1_ED2.HuffmanTree
         public Dictionary<char, double> DiccionarioFrecuencia = new Dictionary<char, double>();
         public Dictionary<char, List<bool>> DiccionarioAux = new Dictionary<char, List<bool>>();
         Nodo nodo = new Nodo();
-        
+
+        public byte[] Byte(BitArray bits)//Separacion de bits
+        {
+            if (bits.Count < 8)
+            {
+                throw new ArgumentException("bits");
+            }
+            string resultado = "";
+            byte[] bytes = new byte[1000];
+            for (int i = 0; i <= 7; i++)
+            {
+                if (bits[i])
+                {
+                    resultado += "1";
+                }
+                else
+                {
+                    resultado += "0";
+                }
+            }
+            for (var j = 8; j < bits.Count; j++)
+            {
+                if ((j) % 8 != 0)
+                {
+                    if (bits[j])
+                    {
+                        resultado += "1";
+                    }
+                    else
+                    {
+                        resultado += "0";
+                    }
+                }
+                else
+                {
+                    resultado += "-";
+                    if (bits[j])
+                    {
+                        resultado += "1";
+                    }
+                    else
+                    {
+                        resultado += "0";
+                    }
+                }
+            }
+
+            string[] cadenas = resultado.Split('-');
+            int total = cadenas[cadenas.Length - 1].Length;
+            
+            byte[] sos = new byte[cadenas.Length];
+            for (int i = 0; i < cadenas.Length; i++)
+            {
+                sos[i] = Convert.ToByte(cadenas[i], 2);
+            }
+
+            return sos;
+        }
+
         public BitArray armarArbol(Dictionary<string,double> DiccionarioFrecuencia,string TextoCompleto) //arma el arbol con su tabla de probabilidades
         {
             
@@ -89,79 +147,12 @@ namespace Laboratorio1_ED2.HuffmanTree
             BitArray bits = new BitArray(ConvertirTextoBinario.ToArray());
             return bits;
         }
-        public byte[] Byte(BitArray bits)//Separacion de bits
-        {
-            
-            if (bits.Count < 8)
-            {
-                throw new ArgumentException("bits");
-            }
-            string resultado = "";
-            byte[] bytes = new byte[1000];
-            for (int i = 0; i <= 7; i++)
-            {
-                if (bits[i])
-                {
-                    resultado += "1";
-                }
-                else
-                {
-                    resultado += "0";
-                }
-            }
-            
-            for (var j = 8; j < bits.Count; j++)
-            {
-               
-                    if ((j) % 8 != 0)
-                    {
-                        if (bits[j])
-                        {
-                            resultado += "1";
-                        }
-                        else
-                        {
-                            resultado += "0";
-                        }
-                    }
-                else 
-                {
-                    resultado += "-";
-                    if (bits[j])
-                    {
-                        resultado += "1";
-                    }
-                    else
-                    {
-                        resultado += "0";
-                    }
-                }
-            }
 
-            string[] cadenas = resultado.Split('-');
-            int total = cadenas[cadenas.Length - 1].Length;
-            //if(total<8)
-            //{
-            //    contador=8-total;
-            //    for (int i = 0; i < contador; i++)
-            //    {
-            //        agregado += "0";
-            //    }
-            //    cadenas[cadenas.Length - 1] =   cadenas[cadenas.Length - 1] + agregado;
-            //}
-            byte[] sos = new byte [cadenas.Length];
-            for (int i = 0; i < cadenas.Length; i++)
-            {
-                sos[i] = Convert.ToByte(cadenas[i], 2);
-
-            }
-
-            return sos;
-        }
-        public static string ToDebugString<Key, Value>(Dictionary<string, double> dictionary)//SI SIRVE
+        public static string ToDebugString<Key, Value>(Dictionary<string, double> dictionary)//Conversion diccionario a String para escritura
         {
             return "{" + string.Join(",", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray()) + "}";
         }
+
         public void EscrituraArchivo(string nombreArchivo, string ruta, BitArray bits, Dictionary<string, double> Diccionario)
         {
             FileInfo fi = new FileInfo(nombreArchivo);
@@ -202,7 +193,7 @@ namespace Laboratorio1_ED2.HuffmanTree
             long length = new System.IO.FileInfo(NuevaRutaA).Length;
         }
 
-        public Dictionary<string, double> ArmarDiccionario(string TextoCompleto)
+        public Dictionary<string, double> ArmarDiccionario(string TextoCompleto)//Armar diccionario para arbol
         {
             Dictionary<string, double> DiccionarioA = new Dictionary<string, double>();
             for (var i = 0; i < TextoCompleto.Length; i++)
@@ -296,7 +287,8 @@ namespace Laboratorio1_ED2.HuffmanTree
             }
             return decodificado;
         }
-        public bool Hoja (Nodo NodoValidado)
+
+        public bool Hoja (Nodo NodoValidado)//Verificar si es la hoja
         {
             return (NodoValidado.Izquierda == null && NodoValidado.Derecha == null);
         }
