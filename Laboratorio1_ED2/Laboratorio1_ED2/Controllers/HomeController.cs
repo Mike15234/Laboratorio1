@@ -22,19 +22,18 @@ namespace Laboratorio1_ED2.Controllers
             return View();
         }
 
-        //Get SubirArchivo
+        //LISTADO DE COMPRESION CON DATOS
+        public ActionResult Listado()
+        {
+            return View("");
+        }
+
+        //HUFFMAN
         public ActionResult SubirArchivo()
         {
 
             return View();
         }
-        //Post SubirArchivo
-        
-        public ActionResult Listado()
-        {
-            return View();
-        }
-
         [HttpPost]
         public ActionResult SubirArchivo(HttpPostedFileBase file)
         {
@@ -65,7 +64,6 @@ namespace Laboratorio1_ED2.Controllers
         {
             return View();
         }
-        Arbol Arbolitu = new Arbol();
         [HttpPost]
         public ActionResult DescompresionArchivo(HttpPostedFileBase file)
         {
@@ -75,7 +73,7 @@ namespace Laboratorio1_ED2.Controllers
             if (allowedExtensions.Contains(extension))
             {
                 var fileName = Path.GetFileName(file.FileName);//obtenemos el nombre del archivo a cargar
-                file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//guardamos el archivo en la ruta física que corresponde a la ruta virtual del archivo
+                //file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//guardamos el archivo en la ruta física que corresponde a la ruta virtual del archivo
                 string filePath = string.Empty;
                 if (file != null)
                 {
@@ -91,7 +89,7 @@ namespace Laboratorio1_ED2.Controllers
                         NuevaRuta += Direccion[i] + "/";
                     }
                     filePath = NuevaRuta + Path.GetFileName(file.FileName);
-                    Arbolitu.Desifrado(filePath);
+                    Data.Instancia.LecturaArchivo(filePath, fileName, path, 1); //lee
                 }
                 return View("DescompresionArchivo");
             }
@@ -102,31 +100,90 @@ namespace Laboratorio1_ED2.Controllers
                 
             }
         }
-    //DOWNLOAD
-        public ActionResult Download()
+
+
+        //LZW
+        public ActionResult SubirLZW()
         {
-            string path = Server.MapPath("~/Descargas");
-            DirectoryInfo dirInfo = new DirectoryInfo(path);
-            FileInfo[] files = dirInfo.GetFiles("*.*");
-            List<string> listaDescargas = new List<string>(files.Length);
-            foreach (var item in files)
-            {
-                listaDescargas.Add(item.Name);
-            }
-            return View(listaDescargas);
+
+            return View();
         }
-        
-        public ActionResult DownloadFile (string filename)
+        [HttpPost]
+        public ActionResult SubirLZW(HttpPostedFileBase file)
         {
-            if (Path.GetExtension(filename) == ".png")
+
+            var fileName = Path.GetFileName(file.FileName);//obtenemos el nombre del archivo a cargar
+            file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//guardamos el archivo en la ruta física que corresponde a la ruta virtual del archivo
+            string filePath = string.Empty;
+            if (file != null)
             {
-                string fullpath = Path.Combine(Server.MapPath("~/Descargas"), filename);
-                return File(fullpath, "Images/png");
+                string NuevaRuta = "";
+                string path = Server.MapPath("~/Uploads");
+                string[] Direccion = path.Split('\\');
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                for (var i = 0; i < Direccion.Length; i++)
+                {
+                    NuevaRuta += Direccion[i] + "/";
+                }
+                filePath = NuevaRuta + Path.GetFileName(file.FileName);
+               // MANDAR A LEER CON LZW
+            }
+            return View();
+        }
+
+        public ActionResult DescompresionLZW()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DescompresionLZW(HttpPostedFileBase file)
+        {
+            file = Request.Files.Get(0);
+            var allowedExtensions = new string[] { ".huff" };
+            string extension = Path.GetExtension(file.FileName);
+            if (allowedExtensions.Contains(extension))
+            {
+                var fileName = Path.GetFileName(file.FileName);
+                string filePath = string.Empty;
+                if (file != null)
+                {
+                    string NuevaRuta = "";
+                    string path = Server.MapPath("~/Uploads");
+                    string[] Direccion = path.Split('\\');
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    for (var i = 0; i < Direccion.Length; i++)
+                    {
+                        NuevaRuta += Direccion[i] + "/";
+                    }
+                    filePath = NuevaRuta + Path.GetFileName(file.FileName);
+                   //MANDAR A LEER TIPO LZW
+                }
+                return View("DescompresionLZW");
             }
             else
             {
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
+
+                return View("SubirLZW");
+
             }
+        }
+
+
+
+
+        //DOWNLOAD
+        public FileResult Download()
+        {
+            string examplePathToFile = Server.MapPath("~/Downloads/");
+            string exampleMimeType = "*.*";
+
+            return new FileStreamResult(new FileStream(examplePathToFile, FileMode.Open, FileAccess.Read), exampleMimeType);
         }
     }
 }

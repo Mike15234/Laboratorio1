@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "SubirLZW";
+}
+
+<h2>SubirLZW</h2>
+
+<h1>LZW</h1>
+
+<h2 class="text-danger">@ViewBag.Error</h2>
+<h2 class="text-success">@ViewBag.Correcto</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <button type="submit">LZW Compress</button>
+</form>
+
+@Html.ActionLink("Comprimir con Huffman", "SubirArchivo")
+@Html.ActionLink("| Realizar Descompresión ", "DescompresiónLZW")
+@Html.ActionLink("| Ir a Descargas", "Listado")

@@ -128,7 +128,6 @@
     <Compile Include="Helpers\Data.cs" />
     <Compile Include="HuffmanTree\Arbol.cs" />
     <Compile Include="HuffmanTree\Nodo.cs" />
-    <Compile Include="Models\Datos.cs" />
     <Compile Include="Models\ListaComprimidos.cs" />
     <Compile Include="Models\SubirArchivoModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -171,9 +170,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\SubirArchivo.cshtml" />
     <Content Include="Views\Home\SubirArchivo.cshtml" />
-    <Content Include="Views\Home\Download.cshtml" />
     <Content Include="Views\Home\DescompresionArchivo.cshtml" />
-    <Content Include="Views\Home\Listado.cshtml" />
+    <Content Include="Views\Home\SubirLZW.cshtml" />
+    <Content Include="Views\Home\DescompresionLZW.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

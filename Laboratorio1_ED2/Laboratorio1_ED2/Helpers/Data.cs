@@ -39,51 +39,36 @@ namespace Laboratorio1_ED2.Helpers
         public void LecturaArchivo(string ruta, string nombre, string rutaEscritura, int def) //LEE EL ARCHIVO
         {
             HuffmanTree.Arbol arbol = new Arbol();
-            using (var stream = new FileStream(ruta, FileMode.Open))
-            {
-                using (var reader = new BinaryReader(stream))
+            
+                if (def == 0)//lo va a leer
                 {
-                    var byteBuffer = new byte[bufferLength];
-                    while (reader.BaseStream.Position != reader.BaseStream.Length)
-                    {
-                        byteBuffer = reader.ReadBytes(bufferLength);
-                    }
-                    letters = System.Text.Encoding.ASCII.GetString(byteBuffer);
-
-                }
-                if(def == 0)
+                using (var stream = new FileStream(ruta, FileMode.Open))
                 {
-                    arbol.EscrituraArchivo(nombre, rutaEscritura, ArbolHuffman.armarArbol(letters), arbol.DiccionarioFrecuencia);
-                }
-                else
-                {
-                    string NuevaRutaD = "";
-                    string RutaArchivos = ruta;// + @"\" + "Descomprimidos";
-                    string[] Direccion1 = RutaArchivos.Split('\\');
-                    string[] nombredes = nombre.Split('.');
-
-                    for (var i = 0; i < Direccion1.Length; i++)
+                    using (var reader = new BinaryReader(stream))
                     {
-                        NuevaRutaD += Direccion1[i] + "/";
-                    }
-                    NuevaRutaD += nombredes[0].ToUpper() + ".txt";
-
-                    if (!File.Exists(NuevaRutaD))
-                    {
-                        using (var writeStream1 = new FileStream(NuevaRutaD, FileMode.OpenOrCreate))
+                        var byteBuffer = new byte[bufferLength];
+                        while (reader.BaseStream.Position != reader.BaseStream.Length)
                         {
-                            using (var writer = new BinaryWriter(writeStream1))
-                            {
-                                writer.Write(arbol.Desifrado(NuevaRutaD));
-                                writer.Close();
-                            }
-                            writeStream1.Close();
+                            byteBuffer = reader.ReadBytes(bufferLength);
                         }
+                        letters = System.Text.Encoding.ASCII.GetString(byteBuffer);
+
                     }
-                    
                 }
-                
+
+                arbol.EscrituraArchivo(nombre, rutaEscritura,arbol.armarArbol(arbol.ArmarDiccionario(letters),letters),arbol.ArmarDiccionario(letters));
+                }
+
+            else//si es uno lo va a escribir
+                {
+                string[] nuevo = nombre.Split('.');
+                nuevo[1] = "OUTPUT.txt";
+                string nuevoNombre = nuevo[0] + nuevo[1];
+                string RutaOut = ruta + nuevoNombre;//CAMVIAR NOMBRE
+
             }
+
+            
         }
 
         public ListaComprimidos Operaciones(string name, double original, long comprimido)
@@ -95,7 +80,7 @@ namespace Laboratorio1_ED2.Helpers
             archivo.FactorCompresion = factorCompresion;
             archivo.RazonCompresio = razonCompresion;
             archivo.PorcentajeCompresion = porcentaje;
-            
+            Comprimidos.Add(archivo);
             return archivo;
         }
         public List<ListaComprimidos> lista(ListaComprimidos archivo)
@@ -103,6 +88,7 @@ namespace Laboratorio1_ED2.Helpers
             Comprimidos.Add(archivo);
             return Comprimidos;
         }
+
 
     }
 }
