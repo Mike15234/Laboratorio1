@@ -6,6 +6,7 @@ using System.IO;
 using Laboratorio1_ED2.Controllers;
 using Laboratorio1_ED2.Models;
 using Laboratorio1_ED2.HuffmanTree;
+using Laboratorio1_ED2.LZW;
 using System.Collections;
 
 namespace Laboratorio1_ED2.Helpers
@@ -30,6 +31,8 @@ namespace Laboratorio1_ED2.Helpers
         Nodo nodo = new Nodo();
         List<ListaComprimidos> Comprimidos = new List<ListaComprimidos>();
         ListaComprimidos archivo = new ListaComprimidos();
+
+
 
         public bool Inicial = true;
         const int bufferLength = 1000;
@@ -57,13 +60,46 @@ namespace Laboratorio1_ED2.Helpers
 
                 arbol.EscrituraArchivo(nombre, rutaEscritura,arbol.armarArbol(arbol.ArmarDiccionario(letters),letters),arbol.ArmarDiccionario(letters));
                 }
-                else
+                else if(def==1)
                 {
 
                     string[] nuevo = nombre.Split('.');
                     nuevo[1] = "OUTPUT.txt";
                     string nuevoNombre = nuevo[0] + nuevo[1];
                     string RutaOut = ruta + nuevoNombre;//CAMBIAR NOMBRE
+                }
+                else if (def == 2)
+            {
+                CompresorLZW Compresor = new CompresorLZW();
+
+
+                using (var stream = new FileStream(ruta, FileMode.Open))//LEER ARCHIVO
+                {
+                    using (var reader = new BinaryReader(stream))
+                    {
+                        var byteBuffer = new byte[bufferLength];
+                        while (reader.BaseStream.Position != reader.BaseStream.Length)
+                        {
+                            byteBuffer = reader.ReadBytes(bufferLength);
+                        }
+                        letters = System.Text.Encoding.ASCII.GetString(byteBuffer);
+
+                    }
+                }
+
+                
+                
+                string NuevaRuta = "";
+                string[] Direccion = rutaEscritura.Split('\\');
+                string[]NuevoNombre=nombre.Split('.');
+                for (var i = 0; i < Direccion.Length; i++)
+                {
+                    NuevaRuta += Direccion[i] + "/";
+                }
+                NuevaRuta += NuevoNombre[0]+".LZW";
+
+                Compresor.EscrituraLZW(NuevaRuta, letters);
+
                 }
         }
 

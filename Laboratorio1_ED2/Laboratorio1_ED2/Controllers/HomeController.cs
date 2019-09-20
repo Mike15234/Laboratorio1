@@ -127,7 +127,8 @@ namespace Laboratorio1_ED2.Controllers
                     NuevaRuta += Direccion[i] + "/";
                 }
                 filePath = NuevaRuta + Path.GetFileName(file.FileName);
-               // MANDAR A LEER CON LZW
+                // MANDAR A LEER CON LZW
+                Data.Instancia.LecturaArchivo(filePath, fileName, path, 2);
             }
             return View();
         }
