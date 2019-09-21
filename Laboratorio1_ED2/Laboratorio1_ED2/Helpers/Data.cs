@@ -32,7 +32,7 @@ namespace Laboratorio1_ED2.Helpers
         List<ListaComprimidos> Comprimidos = new List<ListaComprimidos>();
         ListaComprimidos archivo = new ListaComprimidos();
 
-
+        CompresorLZW Compresor = new CompresorLZW();
 
         public bool Inicial = true;
         const int bufferLength = 1000;
@@ -41,9 +41,9 @@ namespace Laboratorio1_ED2.Helpers
         public void LecturaArchivo(string ruta, string nombre, string rutaEscritura, int def) //LEE EL ARCHIVO
         {
             HuffmanTree.Arbol arbol = new Arbol();
-            
-                if (def == 0)
-                {
+
+            if (def == 0)
+            {
                 using (var stream = new FileStream(ruta, FileMode.Open))
                 {
                     using (var reader = new BinaryReader(stream))
@@ -58,20 +58,27 @@ namespace Laboratorio1_ED2.Helpers
                     }
                 }
 
-                arbol.EscrituraArchivo(nombre, rutaEscritura,arbol.armarArbol(arbol.ArmarDiccionario(letters),letters),arbol.ArmarDiccionario(letters));
-                }
-                else if(def==1)
-                {
-
-                    string[] nuevo = nombre.Split('.');
-                    nuevo[1] = "OUTPUT.txt";
-                    string nuevoNombre = nuevo[0] + nuevo[1];
-                    string RutaOut = ruta + nuevoNombre;//CAMBIAR NOMBRE
-                }
-                else if (def == 2)
+                arbol.EscrituraArchivo(nombre, rutaEscritura, arbol.armarArbol(arbol.ArmarDiccionario(letters), letters), arbol.ArmarDiccionario(letters));
+            }
+            else if (def == 1)
             {
-                CompresorLZW Compresor = new CompresorLZW();
 
+
+                string[] nuevo = nombre.Split('.');
+                nuevo[1] = "OUTPUTHUFF.txt";
+
+                string[] arreglo = ruta.Split('.');
+                string RutaOut = arreglo[0] + nuevo[1];//CAMBIAR NOMBRE
+
+                if (!File.Exists(RutaOut))
+                {
+                    StreamWriter streamWriter = new StreamWriter(RutaOut);
+                    streamWriter.WriteLine(arbol.Desifrado(ruta));
+                    streamWriter.Close();
+                }
+            }
+            else if (def == 2)
+            {
 
                 using (var stream = new FileStream(ruta, FileMode.Open))//LEER ARCHIVO
                 {
@@ -87,22 +94,36 @@ namespace Laboratorio1_ED2.Helpers
                     }
                 }
 
-                
-                
                 string NuevaRuta = "";
                 string[] Direccion = rutaEscritura.Split('\\');
-                string[]NuevoNombre=nombre.Split('.');
+                string[] NuevoNombre = nombre.Split('.');
                 for (var i = 0; i < Direccion.Length; i++)
                 {
                     NuevaRuta += Direccion[i] + "/";
                 }
-                NuevaRuta += NuevoNombre[0]+".LZW";
+                NuevaRuta += NuevoNombre[0] + ".LZW";
 
                 Compresor.EscrituraLZW(NuevaRuta, letters);
 
-                }
-        }
+            }
 
+            else if (def == 3)
+            {
+
+                string[] nuevo = nombre.Split('.');
+                nuevo[1] = "OUTPUTLZW.txt";
+
+                string[] arreglo = ruta.Split('.');
+                string RutaOut = arreglo[0] + nuevo[1];//CAMBIAR NOMBRE
+
+                if (!File.Exists(RutaOut))
+                {
+                    StreamWriter streamWriter = new StreamWriter(RutaOut);
+                    streamWriter.WriteLine(Compresor.Descomprimido(ruta));
+                    streamWriter.Close();
+                }
+            }
+        }
         public ListaComprimidos Operaciones(string name, double original, long comprimido)//Datos para vista de Comprimidos
         {
             double factorCompresion = original / comprimido;

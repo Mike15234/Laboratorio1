@@ -142,7 +142,7 @@ namespace Laboratorio1_ED2.Controllers
         public ActionResult DescompresionLZW(HttpPostedFileBase file)
         {
             file = Request.Files.Get(0);
-            var allowedExtensions = new string[] { ".huff" };
+            var allowedExtensions = new string[] { ".LZW" };
             string extension = Path.GetExtension(file.FileName);
             if (allowedExtensions.Contains(extension))
             {
@@ -162,6 +162,8 @@ namespace Laboratorio1_ED2.Controllers
                         NuevaRuta += Direccion[i] + "/";
                     }
                     filePath = NuevaRuta + Path.GetFileName(file.FileName);
+
+                    Data.Instancia.LecturaArchivo(filePath, fileName, path, 3);
                    //MANDAR A LEER TIPO LZW
                 }
                 return View("DescompresionLZW");

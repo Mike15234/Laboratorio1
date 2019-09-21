@@ -247,6 +247,7 @@ namespace Laboratorio1_ED2.HuffmanTree
             armarArbolComp(dict);
 
             //Splitear lo leido para sacar el diccionario y el texto comprimido aparte
+
             var result = string.Concat(bytes.Select(b => Convert.ToString(b, 2).PadLeft(8, '0')));
 
             BitArray bits = new BitArray(result.Length);
