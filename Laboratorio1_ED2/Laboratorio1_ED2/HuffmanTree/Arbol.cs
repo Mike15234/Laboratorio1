@@ -26,7 +26,7 @@ namespace Laboratorio1_ED2.HuffmanTree
                 throw new ArgumentException("bits");
             }
             string resultado = "";
-            byte[] bytes = new byte[1000];
+            byte[] bytes = new byte[10000000];
             for (int i = 0; i <= 7; i++)
             {
                 if (bits[i])

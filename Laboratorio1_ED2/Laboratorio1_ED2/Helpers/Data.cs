@@ -35,7 +35,7 @@ namespace Laboratorio1_ED2.Helpers
         CompresorLZW Compresor = new CompresorLZW();
 
         public bool Inicial = true;
-        const int bufferLength = 1000;
+        const int bufferLength = 1000000000;
         string letters;
 
         public void LecturaArchivo(string ruta, string nombre, string rutaEscritura, int def) //LEE EL ARCHIVO
