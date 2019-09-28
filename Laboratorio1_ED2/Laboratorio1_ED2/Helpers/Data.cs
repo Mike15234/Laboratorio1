@@ -30,7 +30,7 @@ namespace Laboratorio1_ED2.Helpers
         Arbol ArbolHuffman = new Arbol();
         Nodo nodo = new Nodo();
         List<ListaComprimidos> Comprimidos = new List<ListaComprimidos>();
-        ListaComprimidos archivo = new ListaComprimidos();
+        
 
         CompresorLZW Compresor = new CompresorLZW();
 
@@ -53,6 +53,7 @@ namespace Laboratorio1_ED2.Helpers
                         {
                             byteBuffer = reader.ReadBytes(bufferLength);
                         }
+                        
                         letters = System.Text.Encoding.ASCII.GetString(byteBuffer);
 
                     }
@@ -132,40 +133,49 @@ namespace Laboratorio1_ED2.Helpers
             double porcentaje = 0;
             for (var i = 0; i < Archivos.Length; i++)
             {
-                for (int j = 0; j < Archivos.Length; j++)
+
+                for (int j = 1; j < Archivos.Length; j++)
                 {
-                    if (((Archivos[i].Name.ToUpper().Equals(Archivos[j].Name.ToUpper())) || ((Archivos[j].Name.ToUpper().Equals(Archivos[i].Name.ToUpper())))) && (Archivos[i].Extension != Archivos[j].Extension))
+                    ListaComprimidos archivo = new ListaComprimidos();
+
+                    string[] nombre1=Archivos[i].Name.ToUpper().Split('.');
+                    string[] nombre2= Archivos[j].Name.ToUpper().Split('.');
+                    if ((nombre1[0].Equals(nombre2[0])) && (Archivos[i].Extension != Archivos[j].Extension))
                     {
-                        if ((Archivos[i].Extension != ".huff") && (Archivos[i].Extension != ".LZW"))
+                        if ((Archivos[j].Extension == ".txt") && (Archivos[i].Extension != ".txt"))
                         {
                             original = Archivos[i].Length;
                             comprimido = Archivos[j].Length;
                             factorCompresion = original / comprimido;
                             razonCompresion = comprimido / original;
                             porcentaje = 1 - razonCompresion;
-                            archivo.NombreArchivo = Archivos[i].Name;
+                            archivo.NombreArchivo = Archivos[i].Name;                          
                             archivo.FactorCompresion = factorCompresion;
                             archivo.RazonCompresio = razonCompresion;
                             archivo.PorcentajeCompresion = porcentaje;
-                            lista.Add(archivo);
+                            if (!lista.Contains(archivo))
+                            {
+                                lista.Add(archivo);
+                            }
+                            
                         }
-                        else if ((Archivos[j].Extension != ".huff") && (Archivos[j].Extension != ".LZW"))
+                        else if ((Archivos[j].Extension == ".txt") && (Archivos[i].Extension != ".txt"))
                         {
                             original = Archivos[j].Length;
                             comprimido = Archivos[i].Length;
                             factorCompresion = original / comprimido;
                             razonCompresion = comprimido / original;
                             porcentaje = 1 - razonCompresion;
-                            archivo.NombreArchivo = Archivos[i].Name;
+                            archivo.NombreArchivo = Archivos[j].Name;
                             archivo.FactorCompresion = factorCompresion;
                             archivo.RazonCompresio = razonCompresion;
                             archivo.PorcentajeCompresion = porcentaje;
-                            lista.Add(archivo);
+                            if (!lista.Contains(archivo))
+                            {
+                                lista.Add(archivo);
+                            }
                         }
-
                     }
-
-                    
                 }
             }          
             return lista;
