@@ -62,8 +62,6 @@ namespace Laboratorio1_ED2.Helpers
             }
             else if (def == 1)
             {
-
-
                 string[] nuevo = nombre.Split('.');
                 nuevo[1] = "OUTPUTHUFF.txt";
 
@@ -79,7 +77,6 @@ namespace Laboratorio1_ED2.Helpers
             }
             else if (def == 2)
             {
-
                 using (var stream = new FileStream(ruta, FileMode.Open))//LEER ARCHIVO
                 {
                     using (var reader = new BinaryReader(stream))
@@ -106,10 +103,8 @@ namespace Laboratorio1_ED2.Helpers
                 Compresor.EscrituraLZW(NuevaRuta, letters);
 
             }
-
             else if (def == 3)
             {
-
                 string[] nuevo = nombre.Split('.');
                 nuevo[1] = "OUTPUTLZW.txt";
 
@@ -123,23 +118,59 @@ namespace Laboratorio1_ED2.Helpers
                     streamWriter.Close();
                 }
             }
+
         }
-        public ListaComprimidos Operaciones(string name, double original, long comprimido)//Datos para vista de Comprimidos
+
+        public List<ListaComprimidos>Operaciones(FileInfo[] Archivos)//Datos para vista de Comprimidos
         {
-            double factorCompresion = original / comprimido;
-            double razonCompresion = comprimido / original;
-            double porcentaje = 1 - razonCompresion;
-            archivo.NombreArchivo = name;
-            archivo.FactorCompresion = factorCompresion;
-            archivo.RazonCompresio = razonCompresion;
-            archivo.PorcentajeCompresion = porcentaje;
-            Comprimidos.Add(archivo);
-            return archivo;
+            List<ListaComprimidos> lista = new List<ListaComprimidos>();
+            
+            double original=0;
+            double comprimido=0;
+            double factorCompresion = 0;
+            double razonCompresion = 0;
+            double porcentaje = 0;
+            for (var i = 0; i < Archivos.Length; i++)
+            {
+                for (int j = 0; j < Archivos.Length; j++)
+                {
+                    if (((Archivos[i].Name.ToUpper().Equals(Archivos[j].Name.ToUpper())) || ((Archivos[j].Name.ToUpper().Equals(Archivos[i].Name.ToUpper())))) && (Archivos[i].Extension != Archivos[j].Extension))
+                    {
+                        if ((Archivos[i].Extension != ".huff") && (Archivos[i].Extension != ".LZW"))
+                        {
+                            original = Archivos[i].Length;
+                            comprimido = Archivos[j].Length;
+                            factorCompresion = original / comprimido;
+                            razonCompresion = comprimido / original;
+                            porcentaje = 1 - razonCompresion;
+                            archivo.NombreArchivo = Archivos[i].Name;
+                            archivo.FactorCompresion = factorCompresion;
+                            archivo.RazonCompresio = razonCompresion;
+                            archivo.PorcentajeCompresion = porcentaje;
+                            lista.Add(archivo);
+                        }
+                        else if ((Archivos[j].Extension != ".huff") && (Archivos[j].Extension != ".LZW"))
+                        {
+                            original = Archivos[j].Length;
+                            comprimido = Archivos[i].Length;
+                            factorCompresion = original / comprimido;
+                            razonCompresion = comprimido / original;
+                            porcentaje = 1 - razonCompresion;
+                            archivo.NombreArchivo = Archivos[i].Name;
+                            archivo.FactorCompresion = factorCompresion;
+                            archivo.RazonCompresio = razonCompresion;
+                            archivo.PorcentajeCompresion = porcentaje;
+                            lista.Add(archivo);
+                        }
+
+                    }
+
+                    
+                }
+            }          
+            return lista;
+
         }
-        public List<ListaComprimidos> lista(ListaComprimidos archivo)//Agregar los comprimidos a la lista 
-        {
-            Comprimidos.Add(archivo);
-            return Comprimidos;
-        }
+
     }
 }

@@ -53,6 +53,7 @@ namespace Laboratorio1_ED2.LZW
             {
                 ListaSalida.Add(DiccionarioLZW[previo]);
             }
+
             string Escrito = string.Join(",", ListaSalida);
             
             string[] Arreglo = Escrito.Split(',');

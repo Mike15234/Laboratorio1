@@ -175,11 +175,42 @@ namespace Laboratorio1_ED2.Controllers
         }
 
         //DOWNLOAD
-        public FileResult Download()
+        public ActionResult Donwload()
         {
-            string examplePathToFile = Server.MapPath("~/Downloads/");
-            string exampleMimeType = "*.*";
-            return new FileStreamResult(new FileStream(examplePathToFile, FileMode.Open, FileAccess.Read), exampleMimeType);
+            string path = Server.MapPath("~/Uploads/");
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            FileInfo[] files = dirInfo.GetFiles(".");
+            List<string> lst = new List<string>(files.Length);
+            foreach (var item in files)
+            {
+                lst.Add(item.Name);
+            }
+            return View(lst);
+        }
+
+        public ActionResult DownloadFile(string filename)
+        {
+            if (Path.GetExtension(filename) == ".huff" || Path.GetExtension(filename) == ".txt" || Path.GetExtension(filename) == ".LZW")
+            {
+                string fullpath = Path.Combine(Server.MapPath("~/Uploads"), filename);
+                return File(fullpath, "LZW/huff");
+
+            }
+            else
+            {
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
+            }
+        }
+
+        public ActionResult Comparacion()
+        {
+            string path = Server.MapPath("~/Uploads/");
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            FileInfo[] files = dirInfo.GetFiles(".");
+            List<ListaComprimidos> Listucci = Data.Instancia.Operaciones(files);
+            
+
+            return View(Listucci);
         }
     }
 }
