@@ -127,7 +127,8 @@ namespace Laboratorio1_ED2.Controllers
                     NuevaRuta += Direccion[i] + "/";
                 }
                 filePath = NuevaRuta + Path.GetFileName(file.FileName);
-               // MANDAR A LEER CON LZW
+                // MANDAR A LEER CON LZW
+                Data.Instancia.LecturaArchivo(filePath, fileName, path, 2);
             }
             return View();
         }
@@ -141,7 +142,7 @@ namespace Laboratorio1_ED2.Controllers
         public ActionResult DescompresionLZW(HttpPostedFileBase file)
         {
             file = Request.Files.Get(0);
-            var allowedExtensions = new string[] { ".huff" };
+            var allowedExtensions = new string[] { ".LZW" };
             string extension = Path.GetExtension(file.FileName);
             if (allowedExtensions.Contains(extension))
             {
@@ -161,6 +162,8 @@ namespace Laboratorio1_ED2.Controllers
                         NuevaRuta += Direccion[i] + "/";
                     }
                     filePath = NuevaRuta + Path.GetFileName(file.FileName);
+
+                    Data.Instancia.LecturaArchivo(filePath, fileName, path, 3);
                    //MANDAR A LEER TIPO LZW
                 }
                 return View("DescompresionLZW");
@@ -172,11 +175,42 @@ namespace Laboratorio1_ED2.Controllers
         }
 
         //DOWNLOAD
-        public FileResult Download()
+        public ActionResult Donwload()
         {
-            string examplePathToFile = Server.MapPath("~/Downloads/");
-            string exampleMimeType = "*.*";
-            return new FileStreamResult(new FileStream(examplePathToFile, FileMode.Open, FileAccess.Read), exampleMimeType);
+            string path = Server.MapPath("~/Uploads/");
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            FileInfo[] files = dirInfo.GetFiles(".");
+            List<string> lst = new List<string>(files.Length);
+            foreach (var item in files)
+            {
+                lst.Add(item.Name);
+            }
+            return View(lst);
+        }
+
+        public ActionResult DownloadFile(string filename)
+        {
+            if (Path.GetExtension(filename) == ".huff" || Path.GetExtension(filename) == ".txt" || Path.GetExtension(filename) == ".LZW")
+            {
+                string fullpath = Path.Combine(Server.MapPath("~/Uploads"), filename);
+                return File(fullpath, "LZW/huff");
+
+            }
+            else
+            {
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
+            }
+        }
+
+        public ActionResult Comparacion()
+        {
+            string path = Server.MapPath("~/Uploads/");
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            FileInfo[] files = dirInfo.GetFiles(".");
+            List<ListaComprimidos> Listucci = Data.Instancia.Operaciones(files);
+            
+
+            return View(Listucci);
         }
     }
 }

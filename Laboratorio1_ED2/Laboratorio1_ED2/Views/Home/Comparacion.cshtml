@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Laboratorio1_ED2.Models.ListaComprimidos>
+
+@{
+    ViewBag.Title = "Comparacion";
+}
+
+<h2>Comparacion</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreArchivo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RazonCompresio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FactorCompresion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PorcentajeCompresion)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreArchivo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RazonCompresio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FactorCompresion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PorcentajeCompresion)
+            </td>
+            <td></td>
+        </tr>
+    }
+</table>
+
+@Html.ActionLink("Comprimir con Huffman", "SubirArchivo")
+@Html.ActionLink("| Realizar Descompresión Huffman", "DescompresionArchivo")
+@Html.ActionLink("| Comprimir con LZW", "SubirLZW")
+@Html.ActionLink("| Ir a Descargas", "Donwload")

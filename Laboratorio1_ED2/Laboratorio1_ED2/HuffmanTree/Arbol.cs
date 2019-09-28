@@ -148,7 +148,7 @@ namespace Laboratorio1_ED2.HuffmanTree
             return bits;
         }
 
-        public static string ToDebugString<Key, Value>(Dictionary<string, double> dictionary)//Conversion diccionario a String para escritura
+        public string ToDebugString<Key, Value>(Dictionary<string, double> dictionary)//Conversion diccionario a String para escritura
         {
             return "{" + string.Join(",", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray()) + "}";
         }
@@ -169,6 +169,8 @@ namespace Laboratorio1_ED2.HuffmanTree
             }
             NuevaRutaA += Nombresucci[0].ToUpper() + ".huff";
              byte[] este=  Byte(bits);//Vector con grupos de 8
+
+
             if (!File.Exists(NuevaRutaA))
             {
               
@@ -245,6 +247,7 @@ namespace Laboratorio1_ED2.HuffmanTree
             armarArbolComp(dict);
 
             //Splitear lo leido para sacar el diccionario y el texto comprimido aparte
+
             var result = string.Concat(bytes.Select(b => Convert.ToString(b, 2).PadLeft(8, '0')));
 
             BitArray bits = new BitArray(result.Length);
